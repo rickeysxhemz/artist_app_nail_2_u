@@ -1,0 +1,19 @@
+[05-Feb-2022 12:02:26 UTC] PHP Warning:  The use statement with non-compound name 'Mail' has no effect in /home/nailbuyr/artist.nail2u.net/routes/web.php on line 5
+[05-Feb-2022 12:02:26 UTC] PHP Fatal error:  Cannot use Mail as Mail because the name is already in use in /home/nailbuyr/artist.nail2u.net/routes/web.php on line 5
+[05-Feb-2022 12:03:34 UTC] PHP Warning:  The use statement with non-compound name 'Mail' has no effect in /home/nailbuyr/artist.nail2u.net/routes/web.php on line 5
+[05-Feb-2022 12:03:34 UTC] PHP Fatal error:  Cannot use Mail as Mail because the name is already in use in /home/nailbuyr/artist.nail2u.net/routes/web.php on line 5
+[05-Feb-2022 12:06:44 UTC] PHP Warning:  Uncaught ErrorException: The use statement with non-compound name 'Mail' has no effect in /home/nailbuyr/artist.nail2u.net/routes/web.php:5
+Stack trace:
+#0 /home/nailbuyr/artist.nail2u.net/vendor/laravel/framework/src/Illuminate/Routing/RouteFileRegistrar.php(35): Illuminate\Foundation\Bootstrap\HandleExceptions->handleError(2, 'The use stateme...', '/home/nailbuyr/...', 5, Array)
+#1 /home/nailbuyr/artist.nail2u.net/vendor/laravel/framework/src/Illuminate/Routing/RouteFileRegistrar.php(35): require()
+#2 /home/nailbuyr/artist.nail2u.net/vendor/laravel/framework/src/Illuminate/Routing/Router.php(425): Illuminate\Routing\RouteFileRegistrar->register('/home/nailbuyr/...')
+#3 /home/nailbuyr/artist.nail2u.net/vendor/laravel/framework/src/Illuminate/Routing/Router.php(382): Illuminate\Routing\Router->loadRoutes('/home/nailbuyr/...')
+#4 /home/nailbuyr/artist.nail2u.net/vendor/laravel/framework/src/Illuminate/Routing/RouteRegistrar.php(161): Illuminate\Routing\Router->group(Array, '/home/nailbuyr/...')
+#5 /home/nailbu in /home/nailbuyr/artist.nail2u.net/routes/web.php on line 5
+[05-Feb-2022 12:06:44 UTC] PHP Fatal error:  Cannot use Mail as Mail because the name is already in use in /home/nailbuyr/artist.nail2u.net/routes/web.php on line 5
+[05-Feb-2022 12:09:09 UTC] PHP Warning:  The use statement with non-compound name 'Mail' has no effect in /home/nailbuyr/artist.nail2u.net/routes/web.php on line 5
+[05-Feb-2022 12:09:09 UTC] PHP Fatal error:  Cannot use Mail as Mail because the name is already in use in /home/nailbuyr/artist.nail2u.net/routes/web.php on line 5
+[05-Feb-2022 12:10:56 UTC] PHP Warning:  The use statement with non-compound name 'Mail' has no effect in /home/nailbuyr/artist.nail2u.net/routes/web.php on line 5
+[05-Feb-2022 12:10:56 UTC] PHP Fatal error:  Cannot use Mail as Mail because the name is already in use in /home/nailbuyr/artist.nail2u.net/routes/web.php on line 5
+[03-May-2023 19:19:59 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\UserController::locationStart() in /home/nailbuyr/artist.nail2u.net/app/Http/Controllers/UserController.php on line 107
+[03-May-2023 19:20:09 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\UserController::locationStart() in /home/nailbuyr/artist.nail2u.net/app/Http/Controllers/UserController.php on line 107
