@@ -24,17 +24,24 @@ class DashboardService extends BaseService
                 $user->reviews()->avg('rating');
             }
 
-            $latest_jobs = Booking::with(
-                                    'BookingService:id,name as service_name',
-                                    'Client:id,username,phone_no,address,image_url',
-                                    'ScheduleBooking'
-                                    )
-                                    // ->whereDate('created_at', Carbon::today())
-                                    ->where('artist_id', Auth::id())
-                                    ->where('status', 'new')
-                                    ->get();
-            // Auth::user()->jobs()->with('BookingService:id,name as service_name', 'Client:id,username,phone_no,address,image_url')->whereDate('created_at', Carbon::today())->where('status', 'new')->take(10)->get(['id', 'artist_id', 'client_id', 'started_at', 'ended_at', 'status'])->toArray();
-
+            // $latest_jobs = Booking::with(
+            //                         'BookingService:id,name as service_name',
+            //                         'Client:id,username,phone_no,address,image_url',
+            //                         'ScheduleBooking'
+            //                         )
+            //                         // ->whereDate('created_at', Carbon::today())
+            //                         ->where('artist_id', Auth::id())
+            //                         ->where('status', 'new')
+            //                         ->get();
+            $latest_jobs = UserPostedService::select('id','user_id', 'date', 'time', 'price', 'location', 'created_at')
+                                ->with([
+                                    'Client:id,username,address,cv_url,image_url',
+                                    'PostService:id,name'
+                                ])
+                                ->where('status', 'active')
+                                ->orderby('id','desc')
+                                ->take(1)
+                                ->get();
 
             $job_posts = UserPostedService::select('id','user_id', 'date', 'time', 'price', 'location', 'created_at')
                         ->with([
