@@ -32,9 +32,9 @@ class SettingController extends Controller
         $getSetting = $this->services_service->getSetting();
 
         if (!$getSetting)
-            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Setting did not updated!", $getSetting));
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "User Setting Get Failed!", $getSetting));
 
-        return ($this->global_api_response->success(1, "Setting updated successfully!", $getSetting));
+        return ($this->global_api_response->success(1, "User Setting Get!", $getSetting));
     }
     public function resetPassword(ResetPasswordRequest $request)
     {
