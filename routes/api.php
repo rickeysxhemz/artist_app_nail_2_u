@@ -13,6 +13,7 @@ use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\AccountController;
 use Carbon\CarbonPeriod;
 
 /*
@@ -122,6 +123,10 @@ Route::group(['middleware' => ['auth:api', 'role:artist']], function () {
     Route::prefix('message')->group(function () {
         Route::post('send', [MessageController::class, 'create']);
         Route::post('all', [MessageController::class, 'all']);
+    });
+
+    Route::prefix('account')->group(function () {
+        Route::post('link', [AccountController::class, 'accountLink']);
     });
 });
 
