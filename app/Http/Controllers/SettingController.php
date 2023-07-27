@@ -27,7 +27,15 @@ class SettingController extends Controller
         return ($this->global_api_response->success(1, "Setting updated successfully!", $update_settings['record']));
 
     }
+    public function getSetting()
+    {
+        $getSetting = $this->services_service->getSetting();
 
+        if (!$getSetting)
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "User Setting Get Failed!", $getSetting));
+
+        return ($this->global_api_response->success(1, "User Setting Get!", $getSetting));
+    }
     public function resetPassword(ResetPasswordRequest $request)
     {
         $reset_password = $this->services_service->resetPassword($request);
