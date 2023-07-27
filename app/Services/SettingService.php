@@ -46,7 +46,20 @@ class SettingService extends BaseService
             return false;
         }
     }
+    public function getSetting()
+    {
+        try {
+            $get_setting = Setting::where('user_id', Auth::id())->first();
+             
+            return $get_setting;
 
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("SettingService: getSetting", $error);
+            return false;
+        }
+    }
     public function resetPassword($request)
     {
         try {

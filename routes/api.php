@@ -110,6 +110,7 @@ Route::group(['middleware' => ['auth:api', 'role:artist']], function () {
 
     Route::prefix('settings')->group(function () {
         Route::post('update', [SettingController::class, 'update']);
+        Route::get('get', [SettingController::class, 'getSetting']);
         Route::post('reset-password', [SettingController::class, 'resetPassword']);
     });
 
