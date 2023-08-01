@@ -131,10 +131,10 @@ class DashboardService extends BaseService
                 $booking->total_price = $auth_job->price;
                 $booking->save();
 
-                $transaction = Transaction::where('user_posted_service_id', $id)->fisrt();
+                $transaction = Transaction::where('user_posted_service_id', $id)->first();
                 $transaction->booking_id = $booking->id;
                 $transaction->save();
-                
+
                 $services = DB::table('post_services')
                 ->where('user_posted_service_id', $id)
                 ->pluck('service_id')->toArray();
