@@ -135,6 +135,7 @@ class DashboardService extends BaseService
 
                 $transaction = Transaction::where('user_posted_service_id', $id)->first();
                 $transaction->booking_id = $booking->id;
+                $transaction->receiver_id = Auth::id();
                 $transaction->save();
 
                 $services = DB::table('post_services')
