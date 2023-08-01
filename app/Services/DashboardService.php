@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Booking;
 use App\Models\UserPostedService;
 use App\Models\SchedulerBooking;
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -132,6 +133,10 @@ class DashboardService extends BaseService
                 $booking->total_price = $auth_job->price;
                 $booking->save();
 
+                $transaction = Transaction::where('user_posted_service_id', $id)->fisrt();
+                $transaction->booking_id = $booking->id;
+                $transaction->save();
+                
                 $services = DB::table('post_services')
                 ->where('user_posted_service_id', $id)
                 ->pluck('service_id')->toArray();
