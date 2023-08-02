@@ -9,6 +9,7 @@ use App\Models\Booking;
 use App\Models\UserPostedService;
 use App\Models\SchedulerBooking;
 use App\Models\Transaction;
+use App\Models\BookingLocation;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -135,6 +136,13 @@ class DashboardService extends BaseService
                 $transaction->booking_id = $booking->id;
                 $transaction->receiver_id = Auth::id();
                 $transaction->save();
+
+                $booking_location = new BookingLocation();
+                $booking_location->booking_id = $booking->id;
+                $booking_location->user_longitude = '73.2465732';
+                $booking_location->user_latitude = '29.7521078';
+                $booking_location->status = 'standby';
+                $booking_location->save();
 
                 $services = DB::table('post_services')
                 ->where('user_posted_service_id', $id)
