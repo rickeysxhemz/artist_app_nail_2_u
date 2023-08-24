@@ -367,6 +367,9 @@ class AuthService extends BaseService
                 if($model_has_roles && $model_has_roles->role_id == '2') {
                     return "The email has already been taken as user";
                 } else {
+                    if($request->has('type') && isset($request->type)){
+                        return "";
+                    }
                     return "The email has already been taken";
                 }
             } else {
