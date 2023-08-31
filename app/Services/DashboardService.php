@@ -29,7 +29,8 @@ class DashboardService extends BaseService
             $latest_jobs = UserPostedService::select('id','user_id', 'date', 'time', 'price', 'location', 'created_at')
                                 ->with([
                                     'Client:id,username,address,cv_url,image_url',
-                                    'PostService:id,name'
+                                    'PostService:id,name',
+                                    'Schedule:id,name,time'
                                 ])
                                 ->where('status', 'active')
                                 ->orderby('id','desc')
@@ -39,7 +40,8 @@ class DashboardService extends BaseService
             $job_posts = UserPostedService::select('id','user_id', 'date', 'time', 'price', 'location', 'created_at')
                         ->with([
                             'Client:id,username,address,cv_url,image_url',
-                            'PostService:id,name'
+                            'PostService:id,name',
+                            'Schedule:id,name,time'
                         ])
                         ->where('status', 'active')
                         ->orderby('id','desc')
