@@ -151,7 +151,7 @@ class DashboardService extends BaseService
                 $booking->BookingService()->attach($services);
                 
                 $scheduler_booking = new SchedulerBooking();
-                $scheduler_booking->scheduler_id = '5';
+                $scheduler_booking->scheduler_id = $auth_job->time;
                 $scheduler_booking->user_id = Auth::id();
                 $scheduler_booking->booking_id = $booking->id;
                 $scheduler_booking->status = 'book';
