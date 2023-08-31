@@ -128,7 +128,7 @@ class DashboardService extends BaseService
                 $booking->artist_id = Auth::id();
                 $booking->status = 'new';
                 $booking->client_id = $auth_job->user_id; 
-                $booking->started_at = '5';
+                $booking->started_at = $auth_job->time;
                 $booking->total_price = $auth_job->price;
                 $booking->save();
 
