@@ -7,13 +7,21 @@ use App\Libs\Response\GlobalApiResponseCodeBook;
 use App\Models\ArtistService;
 use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ServicesService extends BaseService
 {
     public function allRaw()
     {
         try {
-            $services_all = Service::orderBy('id', 'desc')->get(['id','name']);
+            $services_all = Service::whereNotExists(function ($query) {
+                $query->select(DB::raw(1))
+                    ->from('artist_services')
+                    ->where('artist_services.artist_id', '=', Auth::id())
+                    ->whereRaw('services.id = artist_services.service_id');
+            })
+            ->orderBy('id', 'desc')
+            ->get(['id','name']);
 
             return Helper::returnRecord(GlobalApiResponseCodeBook::SUCCESS['outcomeCode'], $services_all->toArray());
 
@@ -23,20 +31,7 @@ class ServicesService extends BaseService
             return false;
         }
     }
-    // public function all()
-    // {
-    //     try {
-    //         $services_all = Service::where('artist_id', Auth::id())->orderBy('created_at', 'desc')->paginate(10);
-
-    //         return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_CREATED['outcomeCode'], $services_all->toArray());
-
-    //     } catch (\Exception $e) {
-
-    //         $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
-    //         Helper::errorLogs("Artist:ServicesService: add", $error);
-    //         return false;
-    //     }
-    // }
+    
     public function all($request)
     {
         
