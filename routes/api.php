@@ -39,6 +39,7 @@ Route::prefix('auth')->group(function () {
 
     //Public Routes
     Route::post('register', [AuthController::class, 'register']);
+    Route::post('register-salon', [AuthController::class, 'registerSalon']);
     Route::post('login', [AuthController::class, 'login']);
       Route::get('verify-email/{token}/{email}', [AuthController::class, 'verifyEmail']);
     Route::post('forgot-password', [AuthController::class, 'forgotPassword']);

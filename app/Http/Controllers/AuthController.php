@@ -8,6 +8,7 @@ use App\Http\Requests\AuthRequests\VerifyPhoneRequest;
 use App\Http\Requests\AuthRequests\VerifyEmailRequest;
 use App\Http\Requests\AuthRequests\LoginRequest;
 use App\Http\Requests\AuthRequests\RegisterRequest;
+use App\Http\Requests\AuthRequests\RegisterSalonRequest;
 use App\Http\Requests\AuthRequests\ResetPasswordRequest;
 use App\Libs\Response\GlobalApiResponse;
 use App\Libs\Response\GlobalApiResponseCodeBook;
@@ -33,6 +34,18 @@ class AuthController extends Controller
         if (!$register)
             return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "User did not registered!", $register));
         return ($this->global_api_response->success(1, "Artist registered successfully!", $register));
+    }
+
+    public function registerSalon(RegisterSalonRequest $request)
+    {
+        $register = $this->auth_service->registerSalon($request);
+        
+        if (!$register)
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "User did not registered!", $register));
+        if ($register['outcomeCode'] === GlobalApiResponseCodeBook::RECORD_ALREADY_EXISTS['outcomeCode'])
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::RECORD_ALREADY_EXISTS, "Record Already Exist!", $register['record']));
+        
+        return ($this->global_api_response->success(1, "Salon registered successfully!", $register));
     }
 
     /**

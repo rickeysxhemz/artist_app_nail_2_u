@@ -176,6 +176,159 @@ class AuthService extends BaseService
         }
     }
 
+    public function registerSalon($request)
+    {
+        // try {
+            DB::beginTransaction();
+            
+            $userexist = User::where('email', $request->email)->first();
+            
+            if($userexist &&  $userexist->phone_verified_at == null){
+                $phoneexist = User::where('phone_no', $request->phone_no)->first();
+                
+                if($phoneexist &&  $phoneexist->phone_verified_at == null){
+                    
+                    $user = User::find($phoneexist->id);
+                    $user->username = $request->salonname;
+                    $user->email = $request->email;
+                    $user->password = Hash::make($request->password);
+                    $user->phone_no = $request->phone_no;
+                    $user->address = $request->address;
+                    $user->cover_image = 'storage/artist/images/default-cover-image.PNG';
+                    $user->zipcode = '123456';
+                    $store_image_url = Helper::storeSalonImage($request, $user);
+                    if ($store_image_url)
+                        $user->image_url = $store_image_url;
+                    $user->save();
+
+                    $otp = new OTP();
+                    $otp->user_id = $user->id;
+                    $otp->otp_value = random_int(100000, 999999);
+                    // $otp->otp_value = '123456';
+                    $otp->save();
+                    
+                    $account_sid = 'AC60d20bdd51da17c92e5dd29c9f22e521';
+                    $auth_token = 'bb3720d64d89358fe6915c168f5474d4';
+                    $twilio_number = '+13158478569';
+                    
+                    $receiverNumber = $request->phone_no;
+                    $message = 'This message from Nails2u here is your six digit otp  ' . $otp->otp_value;
+                    $client = new Client($account_sid, $auth_token);
+                    $client->messages->create($receiverNumber, [
+                        'from' => $twilio_number, 
+                        'body' => $message]);
+
+                    DB::commit();
+                    return $user;
+                }
+    
+                $user = User::find($userexist->id);
+                $user->username = $request->salonname;
+                $user->email = $request->email;
+                $user->password = Hash::make($request->password);
+                $user->phone_no = $request->phone_no;
+                $user->address = $request->address;
+                $user->cover_image = 'storage/artist/images/default-cover-image.PNG';
+                $user->zipcode = '123456';
+                $store_image_url = Helper::storeSalonImage($request, $user);
+                if ($store_image_url)
+                    $user->image_url = $store_image_url;
+                $user->save();
+
+                $otp = new OTP();
+                $otp->user_id = $user->id;
+                $otp->otp_value = random_int(100000, 999999);
+                // $otp->otp_value = '123456';
+                $otp->save();
+                
+                $account_sid = 'AC60d20bdd51da17c92e5dd29c9f22e521';
+                $auth_token = 'bb3720d64d89358fe6915c168f5474d4';
+                $twilio_number = '+13158478569';
+                
+                $receiverNumber = $request->phone_no;
+                $message = 'This message from Nails2u here is your six digit otp  ' . $otp->otp_value;
+                $client = new Client($account_sid, $auth_token);
+                $client->messages->create($receiverNumber, [
+                    'from' => $twilio_number, 
+                    'body' => $message]);
+
+                DB::commit();
+                return $user;
+            }
+            
+            if($userexist &&  $userexist->phone_verified_at !== null){
+                return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_ALREADY_EXISTS['outcomeCode'], ['The email has already been taken.']);
+            }
+            $phoneexist = User::where('phone_no', $request->phone_no)->first();
+            if($phoneexist &&  $phoneexist->phone_verified_at !== null){
+                return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_ALREADY_EXISTS['outcomeCode'], ['The Phone has already been taken.']);
+            }
+            
+            
+            $user = new User();
+            $user->username = $request->salonname;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->phone_no = $request->phone_no;
+            $user->address = $request->address;
+            $user->zipcode = '10010';
+            $user->cover_image = 'storage/artist/images/default-cover-image.PNG';
+            $store_image_url = Helper::storeSalonImage($request, $user);
+            if ($store_image_url)
+                $user->image_url = $store_image_url;
+            $user->save();
+
+
+            // $verify_email_token = Str::random(140);
+            // $email_verify = new EmailVerify;
+            // $email_verify->email = $request->email;
+            // $email_verify->token = $verify_email_token;
+            // $email_verify->save();
+
+            $setting = new Setting();
+            $setting->user_id = $user->id;
+            $setting->private_account = 0;
+            $setting->secure_payment = 1;
+            $setting->sync_contact_no = 0;
+            $setting->app_notification = 1;
+            $setting->save();
+
+            $artist_role = Role::findByName('artist');
+            $artist_role->users()->attach($user->id);
+
+            // $mail_data = [
+            //     'email' => $request->email,
+            //     'token' => $verify_email_token
+            // ];
+            // SendEmailVerificationMail::dispatch($mail_data);
+
+            $otp = new OTP();
+            $otp->user_id = $user->id;
+            $otp->otp_value = random_int(100000, 999999);
+            // $otp->otp_value = '123456';
+            $otp->save();
+            
+            $account_sid = 'AC60d20bdd51da17c92e5dd29c9f22e521';
+            $auth_token = 'bb3720d64d89358fe6915c168f5474d4';
+            $twilio_number = '+13158478569';
+            
+            $receiverNumber = $request->phone_no;
+            $message = 'This message from Nails2u here is your six digit otp  ' . $otp->otp_value;
+            $client = new Client($account_sid, $auth_token);
+            $client->messages->create($receiverNumber, [
+                'from' => $twilio_number, 
+                'body' => $message]);
+
+            DB::commit();
+            return $user;
+        // } catch (Exception $e) {
+        //     DB::rollBack();
+        //     $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+        //     Helper::errorLogs("Artist:AuthService: register", $error);
+        //     return false;
+        // }
+    }
+
     public function login($request)
     {
         try {
