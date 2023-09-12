@@ -36,6 +36,19 @@ class Helper
         return $destination;
     }
 
+    public static function storeSalonImage($request, $user)
+    {
+        if (!$request->hasFile('image_url')) {
+            return false;
+        }
+        
+        $file = $request->File('image_url');
+        $file_name = $file->hashName();
+        $request->image_url->move(public_path('storage/profileImages'), $file_name);
+        $destination = 'storage/profileImages/' . $file_name;
+        return $destination;
+    }
+
     public static function errorLogs($function_name, $error)
     {
         $error_log = new ErrorLog;
