@@ -178,7 +178,7 @@ class AuthService extends BaseService
 
     public function registerSalon($request)
     {
-        // try {
+        try {
             DB::beginTransaction();
             
             $userexist = User::where('email', $request->email)->first();
@@ -321,12 +321,12 @@ class AuthService extends BaseService
 
             DB::commit();
             return $user;
-        // } catch (Exception $e) {
-        //     DB::rollBack();
-        //     $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
-        //     Helper::errorLogs("Artist:AuthService: register", $error);
-        //     return false;
-        // }
+        } catch (Exception $e) {
+            DB::rollBack();
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("Artist:AuthService: register", $error);
+            return false;
+        }
     }
 
     public function login($request)
