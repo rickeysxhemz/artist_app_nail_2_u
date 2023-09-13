@@ -49,6 +49,19 @@ class Helper
         return $destination;
     }
 
+    public static function storeServiceImage($request)
+    {
+        if (!$request->hasFile('service_img')) {
+            return false;
+        }
+        
+        $file = $request->File('service_img');
+        $file_name = $file->hashName();
+        $request->service_img->move(public_path('storage/ServiceImages'), $file_name);
+        $destination = 'storage/ServiceImages/' . $file_name;
+        return $destination;
+    }
+
     public static function errorLogs($function_name, $error)
     {
         $error_log = new ErrorLog;

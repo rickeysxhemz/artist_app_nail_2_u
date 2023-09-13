@@ -20,6 +20,7 @@ class ServicesService extends BaseService
                     ->where('artist_services.artist_id', '=', Auth::id())
                     ->whereRaw('services.id = artist_services.service_id');
             })
+            ->where('status', 'admin')
             ->orderBy('id', 'desc')
             ->get(['id','name']);
 
@@ -90,12 +91,34 @@ class ServicesService extends BaseService
     public function add($request)
     {
         try {
-            $services = new ArtistService();
-            $services->artist_id = Auth::id();
-            $services->user_id = Auth::id();
-            $services->service_id = $request->service_id;
-            $services->price = $request->price;
-            $services->save();
+
+            if($request->hasFile('service_img') && isset($request->service_img))
+            {
+
+                $artist_service = new Service();
+                $artist_service->name = $request->name;
+                $artist_service->status = 'artist';
+                $artist_service->amount = $request->price;
+                $store_service_image_url = Helper::storeServiceImage($request);
+                if ($store_service_image_url)
+                    $artist_service->image = 'https://artist.nail2u.net/'.$store_service_image_url;
+                $artist_service->save();
+
+                $services = new ArtistService();
+                $services->artist_id = Auth::id();
+                $services->user_id = Auth::id();
+                $services->service_id = $artist_service->id;
+                $services->price = $request->price;
+                $services->save();
+
+            } else {
+                $services = new ArtistService();
+                $services->artist_id = Auth::id();
+                $services->user_id = Auth::id();
+                $services->service_id = $request->service_id;
+                $services->price = $request->price;
+                $services->save();
+            }
 
             return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_CREATED['outcomeCode'], $services->toArray());
 
