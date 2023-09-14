@@ -54,7 +54,7 @@ Route::prefix('auth')->group(function () {
 });
 
 //Services Routes
-Route::group(['middleware' => ['auth:api', 'role:artist']], function () {
+Route::group(['middleware' => ['auth:api', 'role:artist|salon']], function () {
     Route::prefix('service')->group(function () {
         Route::get('all-raw', [ServiceController::class, 'allRaw']);
         Route::get('all', [ServiceController::class, 'all']);
