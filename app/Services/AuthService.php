@@ -278,13 +278,6 @@ class AuthService extends BaseService
                 $user->image_url = $store_image_url;
             $user->save();
 
-
-            // $verify_email_token = Str::random(140);
-            // $email_verify = new EmailVerify;
-            // $email_verify->email = $request->email;
-            // $email_verify->token = $verify_email_token;
-            // $email_verify->save();
-
             $setting = new Setting();
             $setting->user_id = $user->id;
             $setting->private_account = 0;
@@ -293,19 +286,12 @@ class AuthService extends BaseService
             $setting->app_notification = 1;
             $setting->save();
 
-            $artist_role = Role::findByName('artist');
+            $artist_role = Role::findByName('salon');
             $artist_role->users()->attach($user->id);
-
-            // $mail_data = [
-            //     'email' => $request->email,
-            //     'token' => $verify_email_token
-            // ];
-            // SendEmailVerificationMail::dispatch($mail_data);
 
             $otp = new OTP();
             $otp->user_id = $user->id;
             $otp->otp_value = random_int(100000, 999999);
-            // $otp->otp_value = '123456';
             $otp->save();
             
             $account_sid = 'AC60d20bdd51da17c92e5dd29c9f22e521';
@@ -324,7 +310,7 @@ class AuthService extends BaseService
         } catch (Exception $e) {
             DB::rollBack();
             $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
-            Helper::errorLogs("Artist:AuthService: register", $error);
+            Helper::errorLogs("Artist:AuthService: salonRegister", $error);
             return false;
         }
     }
@@ -335,6 +321,7 @@ class AuthService extends BaseService
             $credentials = $request->only('email', 'password');
             $user = User::whereHas('roles', function ($q) {
                 $q->where('name', 'artist');
+                $q->orWhere('name', 'salon');
             })
                 ->where('email', '=', $credentials['email'])
                 ->with('setting')
