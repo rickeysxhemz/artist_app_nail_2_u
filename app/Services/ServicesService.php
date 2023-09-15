@@ -21,6 +21,7 @@ class ServicesService extends BaseService
                     ->whereRaw('services.id = artist_services.service_id');
             })
             ->where('status', 'admin')
+            ->where('approve', '1')
             ->orderBy('id', 'desc')
             ->get(['id','name']);
 
@@ -46,6 +47,7 @@ class ServicesService extends BaseService
                     ->where('artist_services.artist_id', '=', Auth::id())
                     ->whereRaw('services.id = artist_services.service_id');
             })
+            ->where('approve', '1')
             ->select('id','name')
             ->get();
             if($artist_services){
@@ -99,6 +101,7 @@ class ServicesService extends BaseService
                 $artist_service->name = $request->name;
                 $artist_service->status = 'artist';
                 $artist_service->amount = $request->price;
+                $artist_service->approve = '0';
                 $store_service_image_url = Helper::storeServiceImage($request);
                 if ($store_service_image_url)
                     $artist_service->image = 'https://artist.nail2u.net/'.$store_service_image_url;
@@ -109,6 +112,7 @@ class ServicesService extends BaseService
                 $services->user_id = Auth::id();
                 $services->service_id = $artist_service->id;
                 $services->price = $request->price;
+                $services->approve = '0';
                 $services->save();
 
             } else {
@@ -117,6 +121,7 @@ class ServicesService extends BaseService
                 $services->user_id = Auth::id();
                 $services->service_id = $request->service_id;
                 $services->price = $request->price;
+                $services->approve = '1';
                 $services->save();
             }
 
