@@ -124,6 +124,7 @@ class DashboardService extends BaseService
             if ($auth_job) {
                 DB::begintransaction();
                 $auth_job->status = 'accepted';
+                $auth_job->artist_id = Auth::id();
                 $auth_job->save();
 
                 $booking = new Booking();
