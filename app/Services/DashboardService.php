@@ -65,7 +65,7 @@ class DashboardService extends BaseService
                 'today' => $today,
                 'jobs' =>  $job_posts,
                 // 'job_history' => Auth::user()->jobs()->with('BookingService:id,name as service_name,price', 'Client:id,username,phone_no,address,image_url')->where('status', 'done')->orderBy('id', 'desc')->take(10)->get(['id', 'artist_id', 'client_id', 'started_at', 'ended_at', 'status'])->toArray()
-                'job_history' => Auth::user()->jobs()->with('BookingService:id,name as service_name', 'Client:id,username,phone_no,address,image_url', 'ScheduleBooking')->where('status', 'done')->orderBy('id', 'desc')->take(10)->get(['id', 'artist_id', 'client_id', 'started_at', 'ended_at', 'total_price', 'status'])->toArray()
+                'job_history' => Auth::user()->jobs()->with('BookingService:id,name as service_name', 'Client:id,username,phone_no,address,image_url', 'ScheduleBooking')->whereIn('status', ['cancel','done'])->orderBy('id', 'desc')->take(10)->get(['id', 'artist_id', 'client_id', 'started_at', 'ended_at', 'total_price', 'status'])->toArray()
             ];
 
             $user = [
