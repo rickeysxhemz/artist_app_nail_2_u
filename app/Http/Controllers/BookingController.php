@@ -37,4 +37,31 @@ class BookingController extends Controller
 
         return ($this->global_api_response->success(count($cancel_booking), "Booking cancel successfully!", $cancel_booking['record']));
     }
+    public function setUnavailable(Request $request)
+    {
+        $set_unavailable = $this->booking_service->setUnavailable($request);
+
+        if (!$set_unavailable['outcomeCode'])
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Booking unavailable setting failed!", $set_unavailable['record']));
+
+        return ($this->global_api_response->success(count($set_unavailable), "Booking unavailable time set successfully!", $set_unavailable['record']));
+    }
+    public function listSchedular()
+    {
+        $list_schedular = $this->booking_service->listSchedular();
+
+        if (!$list_schedular['outcomeCode'])
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Schedular list failed!", $list_schedular['record']));
+
+        return ($this->global_api_response->success(count($list_schedular), "Schedular list successfully!", $list_schedular['record']));
+    }
+    public function setAvailable(Request $request)
+    {
+        $set_available = $this->booking_service->setAvailable($request);
+
+        if (!$set_available['outcomeCode'])
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Booking available time setting failed!", $set_available['record']));
+
+        return ($this->global_api_response->success(count($set_available), "Booking available time set successfully!", $set_available['record']));
+    }
 }

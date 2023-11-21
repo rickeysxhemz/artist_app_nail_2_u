@@ -12,6 +12,8 @@ use App\Models\BookingLocation;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\DB;
 use App\Http\Traits\CommonTrait;
+use App\Models\Scheduler;
+use Carbon\Carbon;
 
 class BookingService extends BaseService
 {
@@ -84,6 +86,68 @@ class BookingService extends BaseService
             DB::rollBack();
             $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
             Helper::errorLogs("BookingService: Cancel Booking", $error);
+            return Helper::returnRecord(false, []);
+        }
+    }
+    public function listSchedular()
+    {
+        try{
+            $scheduler=Scheduler::all();
+            return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_CREATED['outcomeCode'], $scheduler);
+        }
+        catch(Exception $e){
+            DB::rollBack();
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("BookingService: listSchedular", $error);
+            return Helper::returnRecord(false, []);
+        }
+    }
+    public function setUnavailable($request)
+    {
+        try {
+        //    dd($request->all());
+        $schedulerIds = Scheduler::whereBetween('id', [$request->start_time, $request->end_time])->pluck('id')->toArray();
+        $unavailability=[];
+        foreach ($schedulerIds as $schedulerId) {
+            $scheduler_booking =new SchedulerBooking();
+            $scheduler_booking->scheduler_id = $schedulerId;
+            $scheduler_booking->user_id = Auth::id();
+            
+            $scheduler_booking->date = $request->date;
+            $scheduler_booking->status = 'book';    
+            $scheduler_booking->save();
+            array_push($unavailability, $scheduler_booking);
+        }
+        
+
+            return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_CREATED['outcomeCode'], $unavailability);
+        } catch (Exception $e) {
+            DB::rollBack();
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("BookingService: setUnavailable", $error);
+            return Helper::returnRecord(false, []);
+        }
+    }
+    public function setAvailable($request)
+    {
+        try {
+            $schedulerIds = Scheduler::whereNotBetween('id', [$request->start_time, $request->end_time])->pluck('id')->toArray();
+            $unavailability=[];
+            foreach ($schedulerIds as $schedulerId) {
+                $scheduler_booking =new SchedulerBooking();
+                $scheduler_booking->scheduler_id = $schedulerId;
+                $scheduler_booking->user_id = Auth::id();
+                
+                $scheduler_booking->date = $request->date;
+                $scheduler_booking->status = 'book';    
+                $scheduler_booking->save();
+                array_push($unavailability, $scheduler_booking);
+            }
+            return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_CREATED['outcomeCode'], true);
+        } catch (Exception $e) {
+            DB::rollBack();
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("BookingService: setAvailable", $error);
             return Helper::returnRecord(false, []);
         }
     }
