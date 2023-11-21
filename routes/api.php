@@ -108,6 +108,9 @@ Route::group(['middleware' => ['auth:api', 'role:artist|salon']], function () {
     Route::prefix('booking')->group(function () {
         Route::post('get-job-history', [BookingController::class, 'getJobHistory']);
         Route::put('cancel/{id}', [BookingController::class, 'cancelBooking']);
+        Route::get('list-schedular', [BookingController::class, 'listSchedular']);
+        Route::post('set-unavailable', [BookingController::class, 'setUnavailable']);
+        Route::post('set-available', [BookingController::class, 'setAvailable']);
     });
 
     Route::prefix('contact')->group(function () {
