@@ -151,4 +151,34 @@ class BookingService extends BaseService
             return Helper::returnRecord(false, []);
         }
     }
+    public function showAvailable($request)
+    {
+        try {
+          $all_times = [];
+          $available = DB::table('schedulers')
+          ->select('id', 'time')
+          ->get();
+           foreach ($available as $time) {
+                    $data['id'] = $time->id;
+                    $data['time'] = $time->time;
+                    $scheduler_bookings = SchedulerBooking::where('user_id', Auth::id())
+                                                            ->where('date', $request->date)
+                                                            ->where('scheduler_id', $time->id)
+                                                            ->first();
+                    if($scheduler_bookings){
+                        $data['status'] = 'unavailable';
+                    } else {
+                        $data['status'] = 'available';
+                    }                                        
+                    array_push($all_times, $data);
+                };
+                $available_time = $all_times;
+            return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_CREATED['outcomeCode'], $available_time);
+        } catch (Exception $e) {
+            DB::rollBack();
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("BookingService: showAvailable", $error);
+            return Helper::returnRecord(false, []);
+        }
+    }
 }

@@ -111,6 +111,7 @@ Route::group(['middleware' => ['auth:api', 'role:artist|salon']], function () {
         Route::get('list-schedular', [BookingController::class, 'listSchedular']);
         Route::post('set-unavailable', [BookingController::class, 'setUnavailable']);
         Route::post('set-available', [BookingController::class, 'setAvailable']);
+        Route::post('show-availability', [BookingController::class, 'showAvailable']);
     });
 
     Route::prefix('contact')->group(function () {
