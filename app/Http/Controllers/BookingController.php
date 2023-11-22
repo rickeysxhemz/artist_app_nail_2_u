@@ -64,4 +64,13 @@ class BookingController extends Controller
 
         return ($this->global_api_response->success(count($set_available), "Booking available time set successfully!", $set_available['record']));
     }
+    public function showAvailable(Request $request)
+    {
+        $show_available = $this->booking_service->showAvailable($request);
+
+        if (!$show_available['outcomeCode'])
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Booking available time showing failed!", $show_available['record']));
+
+        return ($this->global_api_response->success(count($show_available), "Booking available time showed successfully!", $show_available['record']));
+    }
 }
