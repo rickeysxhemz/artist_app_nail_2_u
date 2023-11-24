@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class ServicesService extends BaseService
 {
-    public function allRaw()
+    public function allRaw($request)
     {
         try {
             $services_all = Service::whereNotExists(function ($query) {
@@ -22,6 +22,7 @@ class ServicesService extends BaseService
             })
             ->where('status', 'admin')
             ->where('approve', '1')
+            ->where('category_id', $request->category_id)
             ->orderBy('id', 'desc')
             ->get(['id','name']);
 
@@ -102,6 +103,7 @@ class ServicesService extends BaseService
                 $artist_service->status = 'artist';
                 $artist_service->amount = $request->price;
                 $artist_service->approve = '0';
+                $artist_service->category_id = $request->category_id;
                 $store_service_image_url = Helper::storeServiceImage($request);
                 if ($store_service_image_url)
                     $artist_service->image = 'https://artist.nail2u.net/'.$store_service_image_url;
