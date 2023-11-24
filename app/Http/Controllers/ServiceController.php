@@ -17,9 +17,9 @@ class ServiceController extends Controller
         $this->global_api_response = $GlobalApiResponse;
     }
 
-    public function allRaw()
+    public function allRaw(Request $request)
     {
-        $services_all = $this->services_service->allRaw();
+        $services_all = $this->services_service->allRaw($request);
 
         if (!$services_all)
             return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Services did not displayed!", $services_all));
@@ -27,16 +27,6 @@ class ServiceController extends Controller
         return ($this->global_api_response->success(count($services_all['record']), "Services displayed successfully!", $services_all['record']));
 
     }
-    // public function all()
-    // {
-    //     $services_all = $this->services_service->all();
-
-    //     if (!$services_all)
-    //         return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Services did not displayed!", $services_all));
-
-    //     return ($this->global_api_response->success(1, "Services displayed successfully!", $services_all['record']));
-
-    // }
     
     public function all(Request $request)
     {
@@ -49,16 +39,6 @@ class ServiceController extends Controller
 
     }
 
-    // public function add(AddServicesRequest $request)
-    // {
-    //     $services = $this->services_service->add($request);
-
-    //     if (!$services)
-    //         return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Services did not created!", $services));
-
-    //     return ($this->global_api_response->success(1, "Services created successfully!", $services['record']));
-
-    // }
     public function add(AddServicesRequest $request)
     {
         $services = $this->services_service->add($request);

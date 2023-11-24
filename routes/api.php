@@ -15,6 +15,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\WithdrawController;
+use App\Http\Controllers\CategoryController;
 use Carbon\CarbonPeriod;
 
 /*
@@ -56,12 +57,16 @@ Route::prefix('auth')->group(function () {
 //Services Routes
 Route::group(['middleware' => ['auth:api', 'role:artist|salon']], function () {
     Route::prefix('service')->group(function () {
-        Route::get('all-raw', [ServiceController::class, 'allRaw']);
+        Route::post('all-raw', [ServiceController::class, 'allRaw']);
         Route::get('all', [ServiceController::class, 'all']);
         Route::post('add', [ServiceController::class, 'add']);
         Route::post('edit', [ServiceController::class, 'edit']);
         Route::post('delete', [ServiceController::class, 'delete']);
         Route::post('remove-discount/{id}', [ServiceController::class, 'removeDiscount']);
+    });
+
+    Route::prefix('category')->group(function () {
+        Route::get('all', [CategoryController::class, 'all']);
     });
 
     Route::prefix('dashboard')->group(function () {
