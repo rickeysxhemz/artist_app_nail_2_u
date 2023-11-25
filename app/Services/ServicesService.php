@@ -6,6 +6,7 @@ use App\Helper\Helper;
 use App\Libs\Response\GlobalApiResponseCodeBook;
 use App\Models\ArtistService;
 use App\Models\Service;
+use App\Models\ArtistCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -72,25 +73,6 @@ class ServicesService extends BaseService
             return false;
         }
     }
-
-    // public function add($request)
-    // {
-    //     try {
-    //         $services = new Service();
-    //         $services->artist_id = Auth::id();
-    //         $services->name = $request->name;
-    //         $services->price = $request->price;
-    //         $services->save();
-
-    //         return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_CREATED['outcomeCode'], $services->toArray());
-
-    //     } catch (\Exception $e) {
-
-    //         $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
-    //         Helper::errorLogs("Artist:ServicesService: add", $error);
-    //         return false;
-    //     }
-    // }
     
     public function add($request)
     {
@@ -117,6 +99,15 @@ class ServicesService extends BaseService
                 $services->price = $request->price;
                 $services->approve = '0';
                 $services->save();
+
+                $artist_categories = ArtistCategory::where('artist_id', Auth::id())->where('category_id', $request->category_id)->count();
+
+                if($artist_categories == 0){
+                    $category_add = new ArtistCategory();
+                    $category_add->artist_id = Auth::id();
+                    $category_add->category_id = $request->category_id;
+                    $category_add->save();
+                }
 
             } else {
                 $services = new ArtistService();
@@ -148,8 +139,6 @@ class ServicesService extends BaseService
 
             if ($update_services) {
                 $update_services->price = $request['price'];
-                // $update_services->start_date = $request['start_date'];
-                // $update_services->end_date = $request['end_date'];
                 $update_services->save();
 
                 return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_UPDATED, $update_services->toArray());
