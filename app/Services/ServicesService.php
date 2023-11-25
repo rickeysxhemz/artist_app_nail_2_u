@@ -100,7 +100,7 @@ class ServicesService extends BaseService
                 $services->approve = '0';
                 $services->save();
 
-                $artist_categories = ArtistCategory::where('artist_id', Auth::id())->where('category_id', $request->category_id)->count();
+                $artist_categories = ArtistCategory::where('user_id', Auth::id())->where('category_id', $request->category_id)->count();
 
                 if($artist_categories == 0){
                     $category_add = new ArtistCategory();
@@ -118,7 +118,7 @@ class ServicesService extends BaseService
                 $services->approve = '1';
                 $services->save();
 
-                $artist_categories = ArtistCategory::where('artist_id', Auth::id())->where('category_id', $request->category_id)->count();
+                $artist_categories = ArtistCategory::where('user_id', Auth::id())->where('category_id', $request->category_id)->count();
 
                 if($artist_categories == 0){
                     $category_add = new ArtistCategory();
