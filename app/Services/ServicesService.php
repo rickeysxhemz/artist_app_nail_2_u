@@ -104,7 +104,7 @@ class ServicesService extends BaseService
 
                 if($artist_categories == 0){
                     $category_add = new ArtistCategory();
-                    $category_add->artist_id = Auth::id();
+                    $category_add->user_id = Auth::id();
                     $category_add->category_id = $request->category_id;
                     $category_add->save();
                 }
@@ -117,6 +117,15 @@ class ServicesService extends BaseService
                 $services->price = $request->price;
                 $services->approve = '1';
                 $services->save();
+
+                $artist_categories = ArtistCategory::where('artist_id', Auth::id())->where('category_id', $request->category_id)->count();
+
+                if($artist_categories == 0){
+                    $category_add = new ArtistCategory();
+                    $category_add->user_id = Auth::id();
+                    $category_add->category_id = $request->category_id;
+                    $category_add->save();
+                }
             }
 
             return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_CREATED['outcomeCode'], $services->toArray());
