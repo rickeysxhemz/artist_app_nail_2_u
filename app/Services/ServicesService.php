@@ -49,6 +49,7 @@ class ServicesService extends BaseService
                     ->whereRaw('services.id = artist_services.service_id');
             })
             ->where('approve', '1')
+            ->where('category_id', $request->category_id)
             ->select('id','name')
             ->get();
             if($artist_services){

@@ -58,7 +58,7 @@ Route::prefix('auth')->group(function () {
 Route::group(['middleware' => ['auth:api', 'role:artist|salon']], function () {
     Route::prefix('service')->group(function () {
         Route::post('all-raw', [ServiceController::class, 'allRaw']);
-        Route::get('all', [ServiceController::class, 'all']);
+        Route::post('all', [ServiceController::class, 'all']);
         Route::post('add', [ServiceController::class, 'add']);
         Route::post('edit', [ServiceController::class, 'edit']);
         Route::post('delete', [ServiceController::class, 'delete']);
